@@ -48,7 +48,8 @@ public class BikeScript : MonoBehaviour
         {
             Debug.Log("Rainbow");
             canvas.GetComponent<ShaderTurner>().TurnRainbow();
-            //change order in layer to 1
+            //increase time by double
+            Time.timeScale = 3;
             canvas.GetComponent<SpriteRenderer>().sortingOrder = 1;
         }
         else if (other.gameObject.tag == "RightTurn")
@@ -74,6 +75,7 @@ public class BikeScript : MonoBehaviour
         {
             canvas.GetComponent<ShaderTurner>().TurnDefault();
             canvas.GetComponent<SpriteRenderer>().sortingOrder = -20;
+            Time.timeScale = 1;
         }
     }
 }
