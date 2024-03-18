@@ -5,7 +5,11 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private Vector2 randomDirection;
+    public Vector2 randomDirection;
+
+    public Sprite dieSpash;
+
+    public GameObject canvas;
 
     public float shakeSpeed = 30f;
     public float shakeAmount = 8f;
@@ -14,8 +18,10 @@ public class EnemyScript : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        randomDirection = Random.insideUnitCircle.normalized;
-        InvokeRepeating("ChangeDirection", 5f, 5f);
+        //randomDirection = Random.insideUnitCircle.normalized;
+        InvokeRepeating("ChangeDirection", 2f, 5f);
+        //after 10 seconds call die
+        Invoke("Die", 2f);
     }
 
     // Update is called once per frame
@@ -49,5 +55,23 @@ public class EnemyScript : MonoBehaviour
 
         // Apply the new random direction to the enemy's velocity
         rb.velocity = randomDirection;
+    }
+
+    public void Die()
+    {
+        //add die splash to position
+        GameObject dieSplash = new GameObject();
+        //add random scale
+        float randomScale = Random.Range(1f, 6f);
+        dieSplash.transform.localScale = new Vector3(randomScale, randomScale, 1);
+        dieSplash.transform.position = transform.position;
+        dieSplash.AddComponent<SpriteRenderer>().sprite = dieSpash;
+        //sorting order should be lower than enemy
+        dieSplash.GetComponent<SpriteRenderer>().sortingOrder = -1;
+        //but higher than background
+        dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
+
+        //destroy the enemy
+        Destroy(gameObject);
     }
 }

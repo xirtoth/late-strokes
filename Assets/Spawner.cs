@@ -25,7 +25,7 @@ public class Spawner : MonoBehaviour
     private void Update()
     {
         // every 5 seconds spawn random enemy
-        if (Time.frameCount % 300 == 0)
+        if (Time.frameCount % 1000 == 0)
         {
             int enemyType = Random.Range(0, 3);
             //random spawn type
@@ -45,22 +45,30 @@ public class Spawner : MonoBehaviour
                 break;
 
             case SpawnType.MultipleVertical:
+                //make random direction vector2
+                Vector2 randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
                 for (int i = 0; i < 5; i++)
                 {
-                    Vector3 position = spawnPosition + new Vector3(i, 0, 0);
+                    Vector3 position = spawnPosition + new Vector3(i * 0.5f, 0, 0);
                     enemy = InstantiateEnemy(enemyType, position);
-                    yield return new WaitForSeconds(0.02f);
+                    //set enemy move direction
+                    enemy.GetComponent<EnemyScript>().randomDirection = randomDirection;
+                    yield return new WaitForSeconds(0.1f);
                 }
                 break;
 
             case SpawnType.Circle:
-                for (int i = 0; i < 5; i++)
+                randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
+                for (int i = 0; i < 10; i++)
                 {
                     float angle = i * Mathf.PI * 2 / 5;
                     Vector3 position = spawnPosition + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
                     enemy = InstantiateEnemy(enemyType, position);
-                    yield return new WaitForSeconds(0.02f);
+                    enemy.GetComponent<EnemyScript>().randomDirection = randomDirection;
+                    yield return new WaitForSeconds(0.1f);
                 }
+                Camera cam = Camera.main;
+                // cam.GetComponent<CameraController>().ShakeCamera(0.5f, 0.5f);
                 break;
         }
     }
