@@ -185,7 +185,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomDirection: {x: 0, y: 0}
-  dieSpash: {fileID: 21300000, guid: e031d1f5fd1ab32448b5a8b9fab8c75a, type: 3}
+  dieSpash:
+  - {fileID: 21300000, guid: 2d26b16054a357a449827ecb78ba3409, type: 3}
+  - {fileID: 21300000, guid: e031d1f5fd1ab32448b5a8b9fab8c75a, type: 3}
   canvas: {fileID: 0}
   player: {fileID: 0}
   moveSpeed: 5

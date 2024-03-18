@@ -7,7 +7,8 @@ public enum Sound
     HitBump,
     Hit,
     GameOver,
-    Win
+    Win,
+    Blob
 }
 
 public class AudioManager : MonoBehaviour
@@ -18,6 +19,8 @@ public class AudioManager : MonoBehaviour
 
 
     public AudioClip hitBump;
+
+    public AudioClip blob;
 
     private void Awake()
     {
@@ -53,6 +56,9 @@ public class AudioManager : MonoBehaviour
 
             case Sound.Win:
                 audioSource.Play();
+                break;
+            case Sound.Blob:
+                audioSource.PlayOneShot(blob);
                 break;
         }
     }

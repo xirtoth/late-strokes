@@ -7,7 +7,7 @@ public class EnemyScript : MonoBehaviour
     private Rigidbody2D rb;
     public Vector2 randomDirection;
 
-    public Sprite dieSpash;
+    public List<Sprite> dieSpash = new List<Sprite>();
 
     public GameObject canvas;
 
@@ -62,7 +62,7 @@ public class EnemyScript : MonoBehaviour
     {
         // Generate a random direction
         //rotate the enemy between -8 and 8  in timespan of 2sec
-        //transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * shakeSpeed) * shakeAmount);
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * shakeSpeed) * shakeAmount);
 
 
         // Apply the random direction to the enemy's velocity
@@ -87,6 +87,10 @@ public class EnemyScript : MonoBehaviour
 
     public void Die()
     {
+        var randomSplash = Random.Range(0, dieSpash.Count);
+        //pick splash from list
+        var randomSplashSprite = dieSpash[randomSplash];
+
         //add die splash to position
         GameObject dieSplash = new GameObject();
         //add random scale
@@ -94,7 +98,7 @@ public class EnemyScript : MonoBehaviour
         // dieSplash.transform.localScale = new Vector3(randomScale, randomScale, 1);
         dieSplash.transform.position = transform.position;
         dieSplash.AddComponent<FadeInScript>();
-        dieSplash.AddComponent<SpriteRenderer>().sprite = dieSpash;
+        dieSplash.AddComponent<SpriteRenderer>().sprite = randomSplashSprite;
         //sorting order should be lower than enemy
         dieSplash.GetComponent<SpriteRenderer>().sortingOrder = -1;
         dieSplash.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
@@ -128,10 +132,11 @@ public class EnemyScript : MonoBehaviour
             {
                 break;
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.005f);
         }
 
         // Call Die() after the fade out effect has completed
+        AudioManager.Instance.PlayAudio(Sound.Blob);
         Die();
     }
 
