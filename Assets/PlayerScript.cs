@@ -64,12 +64,12 @@ public class PlayerScript : MonoBehaviour
         //if player is moving right then rotate right
         if (movement.x > 0)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         //if player is moving left then rotate left
         else if (movement.x < 0)
         {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
