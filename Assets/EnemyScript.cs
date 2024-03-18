@@ -39,8 +39,9 @@ public class EnemyScript : MonoBehaviour
         //set this to children of canvas
         //find gameobject with tag canvas
         //set scale to random between 1 and 5   
-        randomScale = Random.Range(1f, 2f);
+        randomScale = Random.Range(1f, 5f);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
+        moveSpeed = Random.Range(1f, 4f);
 
     }
 
@@ -90,8 +91,9 @@ public class EnemyScript : MonoBehaviour
         GameObject dieSplash = new GameObject();
         //add random scale
         //float randomScale = Random.Range(1f, 6f);
-        dieSplash.transform.localScale = new Vector3(randomScale, randomScale, 1);
+        // dieSplash.transform.localScale = new Vector3(randomScale, randomScale, 1);
         dieSplash.transform.position = transform.position;
+        dieSplash.AddComponent<FadeInScript>();
         dieSplash.AddComponent<SpriteRenderer>().sprite = dieSpash;
         //sorting order should be lower than enemy
         dieSplash.GetComponent<SpriteRenderer>().sortingOrder = -1;
@@ -104,6 +106,8 @@ public class EnemyScript : MonoBehaviour
         //destroy the enemy
         Destroy(gameObject);
     }
+
+
 
     private IEnumerator fadeOut()
     {
@@ -119,7 +123,12 @@ public class EnemyScript : MonoBehaviour
             Debug.Log("fading. " + f);
             //also scale down
             transform.localScale = new Vector3(transform.localScale.x - 0.1f, transform.localScale.y - 0.1f, 1);
-            yield return new WaitForSeconds(0.1f);
+            //if scale is < 0 then break
+            if (transform.localScale.x < 0)
+            {
+                break;
+            }
+            yield return new WaitForSeconds(0.05f);
         }
 
         // Call Die() after the fade out effect has completed

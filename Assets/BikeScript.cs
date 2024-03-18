@@ -40,7 +40,7 @@ public class BikeScript : MonoBehaviour
         if (other.gameObject.tag == "RoadBump")
         {
             Debug.Log("RoadBump");
-            cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);
+            cam.GetComponent<CameraController>().ShakeCamera(2f, 0.2f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
             gc.GetComponent<Spawner>().SpawnEnemies();
         }

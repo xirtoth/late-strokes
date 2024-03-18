@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -17,9 +18,15 @@ public class Spawner : MonoBehaviour
     public GameObject redEnemy;
     public GameObject canvas;
 
+    //declare 5 spawnpoints public
+    [SerializeField]
+    public List<GameObject> spawnPoints = new List<GameObject>();
+
     public float spawnInterval = 5f;
 
-    private int spawnCount = 0;
+    //private int spawnCount = 0;
+
+    private Vector3 farSpawnPosition;
 
     private void Start()
     {
@@ -62,36 +69,47 @@ public class Spawner : MonoBehaviour
 
     public IEnumerator SpawnEnemy(SpawnType spawnType, int enemyType)
     {
+
+        //var spawnPosition = spawnPoints[Random.Range(0, spawnPoints.Count)].transform.position;
+        //get farthest spawn point from player
+        foreach (var spawnPoint in spawnPoints)
+        {
+            if (Vector3.Distance(spawnPoint.transform.position, canvas.transform.position) > Vector3.Distance(farSpawnPosition, canvas.transform.position))
+            {
+                farSpawnPosition = spawnPoint.transform.position;
+                Debug.Log(spawnPoint.name + " is farthest");
+            }
+        }
         GameObject enemy;
-        Vector3 spawnPosition = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+        //Vector3 spawnPosition = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
         switch (spawnType)
         {
             case SpawnType.Single:
-                enemy = InstantiateEnemy(enemyType, spawnPosition);
+                enemy = InstantiateEnemy(enemyType, farSpawnPosition);
                 break;
 
             case SpawnType.MultipleVertical:
                 //make random direction vector2
                 Vector2 randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    Vector3 position = spawnPosition + new Vector3(i * 0.5f, 0, 0);
+                    Vector3 position = farSpawnPosition + new Vector3(i * 0.5f, 0, 0);
                     enemy = InstantiateEnemy(enemyType, position);
                     //set enemy move direction
                     enemy.GetComponent<EnemyScript>().randomDirection = randomDirection;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.4f);
                 }
                 break;
 
             case SpawnType.Circle:
                 randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     float angle = i * Mathf.PI * 2 / 5;
-                    Vector3 position = spawnPosition + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+                    Vector3 position = farSpawnPosition + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
                     enemy = InstantiateEnemy(enemyType, position);
                     enemy.GetComponent<EnemyScript>().randomDirection = randomDirection;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.4f);
                 }
                 Camera cam = Camera.main;
                 // cam.GetComponent<CameraController>().ShakeCamera(0.5f, 0.5f);
