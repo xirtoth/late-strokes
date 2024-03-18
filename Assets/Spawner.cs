@@ -25,7 +25,7 @@ public class Spawner : MonoBehaviour
     private void Update()
     {
         // every 5 seconds spawn random enemy
-        if (Time.frameCount % 1000 == 0)
+        if (Time.frameCount % 300 == 0)
         {
             int enemyType = Random.Range(0, 3);
             //random spawn type

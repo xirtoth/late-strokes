@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7691311529838927509}
   m_Layer: 3
   m_Name: RedCubehead
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0c83a6e8b190c744a87b39530b7a7ca8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,6 +102,8 @@ MonoBehaviour:
   randomDirection: {x: 0, y: 0}
   dieSpash: {fileID: 21300000, guid: f6571f2d5aaf7af4e8b6e8da0c2dadc4, type: 3}
   canvas: {fileID: 0}
+  player: {fileID: 0}
+  moveSpeed: 5
   shakeSpeed: 30
   shakeAmount: 8
 --- !u!50 &7344857098146441560

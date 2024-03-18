@@ -11,38 +11,57 @@ public class EnemyScript : MonoBehaviour
 
     public GameObject canvas;
 
+    public GameObject player;
+
+    public float moveSpeed = 5f;
+
     public float shakeSpeed = 30f;
     public float shakeAmount = 8f;
+
 
     // Start is called before the first frame update
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player");
         //randomDirection = Random.insideUnitCircle.normalized;
         InvokeRepeating("ChangeDirection", 2f, 5f);
         //after 10 seconds call die
-        Invoke("Die", 2f);
+        Invoke("Die", 10f);
+
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        Debug.Log(canvas.name);
+        //set this to children of canvas
+        //find gameobject with tag canvas
+
     }
 
     // Update is called once per frame
     private void Update()
     {
+
     }
 
     private void FixedUpdate()
     {
         Move();
+
+
     }
 
     private void Move()
     {
         // Generate a random direction
         //rotate the enemy between -8 and 8  in timespan of 2sec
-        // transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * shakeSpeed) * shakeAmount);
+        //transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * shakeSpeed) * shakeAmount);
 
 
         // Apply the random direction to the enemy's velocity
-        rb.velocity = randomDirection;
+        //make the enemy move in random direction with speed
+        //move towards player 
+        Vector2 direction = (player.transform.position - transform.position).normalized;
+        rb.velocity = direction * moveSpeed;
+
 
         // Change the direction every 5 seconds
 
@@ -68,8 +87,11 @@ public class EnemyScript : MonoBehaviour
         dieSplash.AddComponent<SpriteRenderer>().sprite = dieSpash;
         //sorting order should be lower than enemy
         dieSplash.GetComponent<SpriteRenderer>().sortingOrder = -1;
+        dieSplash.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
         //but higher than background
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
+
+        //canvas.GetComponent<SpriteTextureGenerator>().AddColorSplash(Color.red, 5);
 
         //destroy the enemy
         Destroy(gameObject);
