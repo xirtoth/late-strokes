@@ -18,6 +18,11 @@ public class EnemyScript : MonoBehaviour
     public float shakeSpeed = 30f;
     public float shakeAmount = 8f;
 
+    public float health = 100f;
+    public float maxHelath = 100f;
+
+    private float randomScale;
+
 
     // Start is called before the first frame update
     private void Start()
@@ -33,6 +38,9 @@ public class EnemyScript : MonoBehaviour
         Debug.Log(canvas.name);
         //set this to children of canvas
         //find gameobject with tag canvas
+        //set scale to random between 1 and 5   
+        randomScale = Random.Range(1f, 2f);
+        transform.localScale = new Vector3(randomScale, randomScale, 1);
 
     }
 
@@ -81,7 +89,7 @@ public class EnemyScript : MonoBehaviour
         //add die splash to position
         GameObject dieSplash = new GameObject();
         //add random scale
-        float randomScale = Random.Range(1f, 6f);
+        //float randomScale = Random.Range(1f, 6f);
         dieSplash.transform.localScale = new Vector3(randomScale, randomScale, 1);
         dieSplash.transform.position = transform.position;
         dieSplash.AddComponent<SpriteRenderer>().sprite = dieSpash;
@@ -95,5 +103,32 @@ public class EnemyScript : MonoBehaviour
 
         //destroy the enemy
         Destroy(gameObject);
+    }
+
+    private IEnumerator fadeOut()
+    {
+        //disable collider and rb
+        GetComponent<Collider2D>().enabled = false;
+        rb.velocity = Vector2.zero;
+
+        for (float f = 1f; f >= -0.05f; f -= 0.05f)
+        {
+            Color c = GetComponent<SpriteRenderer>().material.color;
+            c.a = f;
+            GetComponent<SpriteRenderer>().material.color = c;
+            Debug.Log("fading. " + f);
+            //also scale down
+            transform.localScale = new Vector3(transform.localScale.x - 0.1f, transform.localScale.y - 0.1f, 1);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // Call Die() after the fade out effect has completed
+        Die();
+    }
+
+    public void TakeDamage()
+    {
+        Debug.Log("taking damage");
+        StartCoroutine(fadeOut());
     }
 }

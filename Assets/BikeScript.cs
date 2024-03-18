@@ -9,12 +9,18 @@ public class BikeScript : MonoBehaviour
 
     private GameObject canvas;
 
+    public GameObject gc;
+
+    Vector3 movingDirection;
+
 
     // Start is called before the first frame update
     private void Start()
     {
         cam = Camera.main;
         canvas = GameObject.FindGameObjectWithTag("Canvas");
+        movingDirection = Vector3.up;
+        gc = GameObject.FindGameObjectWithTag("GameController");
     }
 
     // Update is called once per frame
@@ -25,7 +31,7 @@ public class BikeScript : MonoBehaviour
     private void FixedUpdate()
     {
         //move the bike y axis with speed
-        transform.position += Vector3.up * speed * Time.deltaTime;
+        transform.position += movingDirection * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -36,6 +42,7 @@ public class BikeScript : MonoBehaviour
             Debug.Log("RoadBump");
             cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
+            gc.GetComponent<Spawner>().SpawnEnemies();
         }
         else if (other.gameObject.tag == "Rainbow")
         {
@@ -43,6 +50,18 @@ public class BikeScript : MonoBehaviour
             canvas.GetComponent<ShaderTurner>().TurnRainbow();
             //change order in layer to 1
             canvas.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        }
+        else if (other.gameObject.tag == "RightTurn")
+        {
+            //rotate bike to right
+            //get old z rotation and -90 from it
+            var oldRotation = transform.rotation.z;
+
+
+            transform.Rotate(0, 0, oldRotation - 90);
+            movingDirection = transform.up;
+            //load next level
+
         }
 
         //  cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);
@@ -54,7 +73,7 @@ public class BikeScript : MonoBehaviour
         if (other.gameObject.tag == "Rainbow")
         {
             canvas.GetComponent<ShaderTurner>().TurnDefault();
-            canvas.GetComponent<SpriteRenderer>().sortingOrder = -400;
+            canvas.GetComponent<SpriteRenderer>().sortingOrder = -20;
         }
     }
 }

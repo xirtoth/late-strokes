@@ -5,15 +5,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
+        //make camera wave a bit to left and right
     }
 
     public void ShakeCamera(float shakeDuration, float shakeAmount)

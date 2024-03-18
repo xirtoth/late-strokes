@@ -17,6 +17,10 @@ public class Spawner : MonoBehaviour
     public GameObject redEnemy;
     public GameObject canvas;
 
+    public float spawnInterval = 5f;
+
+    private int spawnCount = 0;
+
     private void Start()
     {
     }
@@ -25,13 +29,35 @@ public class Spawner : MonoBehaviour
     private void Update()
     {
         // every 5 seconds spawn random enemy
-        if (Time.frameCount % 300 == 0)
-        {
-            int enemyType = Random.Range(0, 3);
-            //random spawn type
-            int spawnType = Random.Range(0, 3);
-            StartCoroutine(SpawnEnemy((SpawnType)spawnType, enemyType));
-        }
+        /*   if (Time.frameCount % 1000 == 0)
+           {
+               int enemyType = Random.Range(0, 3);
+               //random spawn type
+               int spawnType = Random.Range(0, 3);
+               StartCoroutine(SpawnEnemy((SpawnType)spawnType, enemyType));
+           } */
+
+        /*  if (Time.time > spawnInterval)
+          {
+              spawnInterval += 5f - spawnCount * 0.1f;
+              spawnCount++;
+              if (spawnCount > 10)
+              {
+                  spawnCount = 10;
+              }
+              int enemyType = Random.Range(0, 3);
+              //random spawn type
+              int spawnType = Random.Range(0, 3);
+              StartCoroutine(SpawnEnemy((SpawnType)spawnType, enemyType));
+          }*/
+    }
+
+
+    public void SpawnEnemies()
+    {
+        StartCoroutine(SpawnEnemy(SpawnType.Single, Random.Range(0, 3)));
+        StartCoroutine(SpawnEnemy(SpawnType.MultipleVertical, Random.Range(0, 3)));
+        StartCoroutine(SpawnEnemy(SpawnType.Circle, Random.Range(0, 3)));
     }
 
     public IEnumerator SpawnEnemy(SpawnType spawnType, int enemyType)
@@ -59,7 +85,7 @@ public class Spawner : MonoBehaviour
 
             case SpawnType.Circle:
                 randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     float angle = i * Mathf.PI * 2 / 5;
                     Vector3 position = spawnPosition + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);

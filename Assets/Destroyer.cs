@@ -21,7 +21,7 @@ public class Destroyer : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            other.gameObject.GetComponent<EnemyScript>().Die();
+            other.gameObject.GetComponent<EnemyScript>().TakeDamage();
             Destroy(gameObject);
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -14,11 +15,18 @@ public class PlayerScript : MonoBehaviour
     public float bulletVelocity = 50f;
 
     private Vector2 movement;
+    public float shootCooldown = 0.5f;
+
+    public float health = 100f;
+    public float maxHelalth = 100f;
+
+    public GameObject gc;
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gc = GameObject.FindGameObjectWithTag("GameController");
     }
 
     // Update is called once per frame
@@ -31,8 +39,15 @@ public class PlayerScript : MonoBehaviour
         movement = new Vector2(moveHorizontal, moveVertical);
 
         // shoot towards mouse position
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
+            if (Time.time < shootCooldown)
+            {
+                return;
+            }
+            shootCooldown = Time.time + 0.5f;
+
+
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (mousePos - transform.position).normalized;
             ShootBullet(direction);
@@ -67,4 +82,31 @@ public class PlayerScript : MonoBehaviour
 
 
     }
+
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        gc.GetComponent<UIcontroller>().UpdateHealth(health);
+        if (health <= 0)
+        {
+            health = 100;
+        }
+    }
+
+    public void Die()
+    {
+        //load level again
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            TakeDamage(10);
+        }
+    }
+
+
 }
