@@ -11,6 +11,12 @@ public class BikeScript : MonoBehaviour
 
     public GameObject gc;
 
+    public float speedMultiplier40 = 1f;
+
+    public float speedMulplier60 = 1.4f;
+
+    public float speedMulplier80 = 2f;
+
     Vector3 movingDirection;
 
 
@@ -51,6 +57,7 @@ public class BikeScript : MonoBehaviour
             //increase time by double
             Time.timeScale = 3;
             canvas.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
         }
         else if (other.gameObject.tag == "RightTurn")
         {
@@ -64,6 +71,23 @@ public class BikeScript : MonoBehaviour
             //load next level
 
         }
+        else if (other.gameObject.tag == "Speed40")
+        {
+            Debug.Log("Speed40");
+            Time.timeScale = speedMultiplier40;
+        }
+
+        else if (other.gameObject.tag == "Speed60")
+        {
+            Debug.Log("Speed60");
+            Time.timeScale = speedMulplier60;
+        }
+
+        else if (other.gameObject.tag == "Speed80")
+        {
+            Debug.Log("Speed80");
+            Time.timeScale = speedMulplier80;
+        }
 
         //  cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);
         //  AudioManager.Instance.PlayAudio(Sound.HitBump);
@@ -76,6 +100,11 @@ public class BikeScript : MonoBehaviour
             canvas.GetComponent<ShaderTurner>().TurnDefault();
             canvas.GetComponent<SpriteRenderer>().sortingOrder = -20;
             Time.timeScale = 1;
+        }
+        else if (other.gameObject.tag == "Speed40")
+        {
+            /* Time.timeScale = 1;
+             Debug.Log("Speed40 eneded");*/
         }
     }
 }

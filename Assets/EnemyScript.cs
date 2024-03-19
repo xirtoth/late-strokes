@@ -15,8 +15,8 @@ public class EnemyScript : MonoBehaviour
 
     public float moveSpeed = 5f;
 
-    public float shakeSpeed = 30f;
-    public float shakeAmount = 8f;
+    public float shakeSpeed = 16f;
+    public float shakeAmount = 5f;
 
     public float health = 100f;
     public float maxHelath = 100f;
@@ -32,14 +32,14 @@ public class EnemyScript : MonoBehaviour
         //randomDirection = Random.insideUnitCircle.normalized;
         InvokeRepeating("ChangeDirection", 2f, 5f);
         //after 10 seconds call die
-        Invoke("Die", 10f);
+        //Invoke("Die", 10f);
 
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         Debug.Log(canvas.name);
         //set this to children of canvas
         //find gameobject with tag canvas
         //set scale to random between 1 and 5   
-        randomScale = Random.Range(1f, 5f);
+        randomScale = Random.Range(1f, 2.5f);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
         moveSpeed = Random.Range(1f, 4f);
 
