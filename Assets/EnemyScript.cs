@@ -22,6 +22,15 @@ public class EnemyScript : MonoBehaviour
     public float maxHelath = 100f;
 
     private float randomScale;
+    public float hopForce = 5f; // The force of the hop
+    public float hopInterval = 1f; // The time between hops
+    private float nextHopTime;
+
+    public float slowingFactor = 0.95f;
+    public float stoppingDistance = 1f;
+    public float amplitude = 40f; // The magnitude of oscillation
+    public float frequency = 0.5f; // The frequency of oscillation
+    public Vector2 initialPosition; // The initial position of the enemy
 
 
     // Start is called before the first frame update
@@ -30,7 +39,7 @@ public class EnemyScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player");
         //randomDirection = Random.insideUnitCircle.normalized;
-        InvokeRepeating("ChangeDirection", 2f, 5f);
+        // InvokeRepeating("ChangeDirection", 2f, 5f);
         //after 10 seconds call die
         //Invoke("Die", 10f);
 
@@ -42,6 +51,7 @@ public class EnemyScript : MonoBehaviour
         randomScale = Random.Range(1f, 2.5f);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
         moveSpeed = Random.Range(1f, 4f);
+        initialPosition = transform.position;
 
     }
 
@@ -60,21 +70,21 @@ public class EnemyScript : MonoBehaviour
 
     private void Move()
     {
-        // Generate a random direction
-        //rotate the enemy between -8 and 8  in timespan of 2sec
-        transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * shakeSpeed) * shakeAmount);
-
-
-        // Apply the random direction to the enemy's velocity
-        //make the enemy move in random direction with speed
-        //move towards player 
+        // Determine the direction towards the player
         Vector2 direction = (player.transform.position - transform.position).normalized;
-        rb.velocity = direction * moveSpeed;
 
+        // Calculate the sine offset for vertical oscillation
+        float offset = Mathf.Sin(Time.time * frequency) * amplitude;
 
-        // Change the direction every 5 seconds
+        // Apply the direction towards the player with vertical oscillation
+        Vector2 movement = (direction + new Vector2(0, offset)).normalized * moveSpeed;
 
+        // Apply the movement to the enemy
+        rb.velocity = movement;
     }
+
+
+
 
     private void ChangeDirection()
     {

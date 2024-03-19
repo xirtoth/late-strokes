@@ -18,6 +18,7 @@ public class BikeScript : MonoBehaviour
     public float speedMulplier80 = 2f;
 
     Vector3 movingDirection;
+    public List<Sprite> dieSpash = new List<Sprite>();
 
 
     // Start is called before the first frame update
@@ -48,7 +49,7 @@ public class BikeScript : MonoBehaviour
             Debug.Log("RoadBump");
             cam.GetComponent<CameraController>().ShakeCamera(2f, 0.2f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
-            gc.GetComponent<Spawner>().SpawnEnemies();
+            gc.GetComponent<Spawner>().SpawnBalls();
         }
         else if (other.gameObject.tag == "Rainbow")
         {
@@ -74,6 +75,15 @@ public class BikeScript : MonoBehaviour
         else if (other.gameObject.tag == "Speed40")
         {
             Debug.Log("Speed40");
+            //get parent of the object
+            if (other.transform.parent != null)
+            {
+                //get parent of the object
+                var parent = other.transform.parent.gameObject;
+                //destroy parent
+                if (parent.GetComponent<TrafficSignScript>() != null)
+                    parent.GetComponent<TrafficSignScript>().ZoomEffect();
+            }
             Time.timeScale = speedMultiplier40;
         }
 
@@ -81,12 +91,23 @@ public class BikeScript : MonoBehaviour
         {
             Debug.Log("Speed60");
             Time.timeScale = speedMulplier60;
+            //get parent of the object
+            var parent = other.transform.parent.gameObject;
+            //destroy parent
+            if (parent.GetComponent<TrafficSignScript>() != null)
+                parent.GetComponent<TrafficSignScript>().ZoomEffect();
+
         }
 
         else if (other.gameObject.tag == "Speed80")
         {
             Debug.Log("Speed80");
             Time.timeScale = speedMulplier80;
+            //get parent of the object
+            var parent = other.transform.parent.gameObject;
+            //destroy parent
+            if (parent.GetComponent<TrafficSignScript>() != null)
+                parent.GetComponent<TrafficSignScript>().ZoomEffect();
         }
 
         //  cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);

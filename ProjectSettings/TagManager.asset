@@ -9,6 +9,11 @@ TagManager:
   - RoadBump
   - Rainbow
   - RightTurn
+  - Speed40
+  - Speed60
+  - Speed80
+  - Drug
+  - Wall
   layers:
   - Default
   - TransparentFX

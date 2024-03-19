@@ -22,11 +22,14 @@ public class PlayerScript : MonoBehaviour
 
     public GameObject gc;
 
+    public GameObject canvas;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         gc = GameObject.FindGameObjectWithTag("GameController");
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
     }
 
     // Update is called once per frame
@@ -105,6 +108,14 @@ public class PlayerScript : MonoBehaviour
         if (col.gameObject.tag == "Enemy")
         {
             TakeDamage(10);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Drug")
+        {
+            canvas.GetComponent<ShaderTurner>().TurnRainbow();
         }
     }
 

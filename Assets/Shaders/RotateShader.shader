@@ -1,66 +1,55 @@
-Shader "Custom/FullscreenRotate"
+Shader "Custom/SwirlingRainbowShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Speed ("Speed", Range(1, 10)) = 5
     }
+ 
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
         LOD 100
-
+ 
         Pass
         {
+            Blend SrcAlpha OneMinusSrcAlpha
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
             #include "UnityCG.cginc"
-
+ 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
             };
-
+ 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
-
+ 
             sampler2D _MainTex;
-            float _Speed;
-
-            v2f vert(appdata v)
+            float4 _MainTex_ST;
+ 
+            v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = v.uv;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-
-            fixed4 frag(v2f i) : SV_Target
+ 
+            fixed4 frag (v2f i) : SV_Target
             {
-                // Calculate rotation angle based on time
-                float angle = _Time.y * 360 * _Speed;
-
-                // Convert UV coordinates to range [-0.5, 0.5]
-                float2 uvOffset = i.uv - 0.5;
-
-                // Apply rotation
-                float2 rotatedUV = uvOffset;
-                rotatedUV.x = uvOffset.x * cos(angle) - uvOffset.y * sin(angle);
-                rotatedUV.y = uvOffset.x * sin(angle) + uvOffset.y * cos(angle);
-
-                // Convert back to range [0, 1]
-                rotatedUV += 0.5;
-
-                // Sample texture
-                fixed4 col = tex2D(_MainTex, rotatedUV);
-
-                return col;
+                float2 uv = i.uv;
+                float angle = atan2(uv.y - 0.5, uv.x - 0.5);
+                float rainbowFactor = (angle / (2 * 3.14159) + _Time.y * 0.1) * 5;
+                float3 rainbowColor = float3(sin(rainbowFactor), sin(rainbowFactor + 2), sin(rainbowFactor + 4));
+                return float4(rainbowColor, 0.5); // Set alpha to 0.5 for semi-transparency
             }
             ENDCG
         }

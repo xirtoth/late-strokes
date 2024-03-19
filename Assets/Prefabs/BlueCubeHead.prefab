@@ -190,11 +190,18 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e031d1f5fd1ab32448b5a8b9fab8c75a, type: 3}
   canvas: {fileID: 0}
   player: {fileID: 0}
-  moveSpeed: 5
+  moveSpeed: 2
   shakeSpeed: 30
   shakeAmount: 8
   health: 100
   maxHelath: 100
+  hopForce: 5
+  hopInterval: 1
+  slowingFactor: 0.95
+  stoppingDistance: 1
+  amplitude: 1.5
+  frequency: 2
+  initialPosition: {x: 0, y: 0}
 --- !u!50 &2645434615037026102
 Rigidbody2D:
   serializedVersion: 4

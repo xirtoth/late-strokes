@@ -16,7 +16,14 @@ public class Spawner : MonoBehaviour
     public GameObject greenEnemy;
     public GameObject blueEnemy;
     public GameObject redEnemy;
+
+    public GameObject redBall;
+    public GameObject blueBall;
+    public GameObject greenBall;
+
     public GameObject canvas;
+
+    public GameObject ballEnemySpawn;
 
     //declare 5 spawnpoints public
     [SerializeField]
@@ -30,6 +37,7 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
+        //   InvokeRepeating("SpawnEnemies", 2.0f, 5.0f);
     }
 
     // Update is called once per frame
@@ -58,7 +66,32 @@ public class Spawner : MonoBehaviour
               StartCoroutine(SpawnEnemy((SpawnType)spawnType, enemyType));
           }*/
     }
+    public void SpawnBalls()
+    {
+        StartCoroutine(SpawnBall());
+    }
 
+    public IEnumerator SpawnBall()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            int RandomBall = Random.Range(0, 3);
+            switch (RandomBall)
+            {
+                case 0:
+                    Instantiate(redBall, ballEnemySpawn.transform.position, Quaternion.identity);
+                    break;
+                case 1:
+                    Instantiate(blueBall, ballEnemySpawn.transform.position, Quaternion.identity);
+                    break;
+                case 2:
+                    Instantiate(greenBall, ballEnemySpawn.transform.position, Quaternion.identity);
+                    break;
+
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
 
     public void SpawnEnemies()
     {
@@ -91,7 +124,7 @@ public class Spawner : MonoBehaviour
             case SpawnType.MultipleVertical:
                 //make random direction vector2
                 Vector2 randomDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     Vector3 position = farSpawnPosition + new Vector3(i * 0.5f, 0, 0);
                     enemy = InstantiateEnemy(enemyType, position);

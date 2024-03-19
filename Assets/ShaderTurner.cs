@@ -20,11 +20,23 @@ public class ShaderTurner : MonoBehaviour
     public void TurnRainbow()
     {
         Debug.Log("TurnRainbow");
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         GetComponent<SpriteRenderer>().material = rainbowMaterial;
+        StartCoroutine(TurnRainbowOff());
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<EnemyScript>().TakeDamage();
+        }
     }
 
     public void TurnDefault()
     {
         GetComponent<SpriteRenderer>().material = defaultMaterial;
+    }
+
+    private IEnumerator TurnRainbowOff()
+    {
+        yield return new WaitForSeconds(5);
+        TurnDefault();
     }
 }
