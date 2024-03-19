@@ -46,10 +46,29 @@ public class BikeScript : MonoBehaviour
 
         if (other.gameObject.tag == "RoadBump")
         {
-            Debug.Log("RoadBump");
+            var parent = other.transform.parent.gameObject;
+            if (parent.GetComponent<TrafficSignScript>() != null)
+            {
+                if (parent.GetComponent<TrafficSignScript>().hasEntered)
+                {
+                    return;
+                }
+            }
+            Debug.Log("RoadBump triggered by " + other.gameObject.name + " at " + Time.time);
             cam.GetComponent<CameraController>().ShakeCamera(2f, 0.2f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
             gc.GetComponent<Spawner>().SpawnBalls();
+            if (other.transform.parent != null)
+            {
+                //get parent of the object
+
+                //destroy parent
+                if (parent.GetComponent<TrafficSignScript>() != null)
+                {
+                    parent.GetComponent<TrafficSignScript>().ZoomEffect();
+                    parent.GetComponent<TrafficSignScript>().hasEntered = true;
+                }
+            }
         }
         else if (other.gameObject.tag == "Rainbow")
         {
@@ -74,7 +93,7 @@ public class BikeScript : MonoBehaviour
         }
         else if (other.gameObject.tag == "Speed40")
         {
-            Debug.Log("Speed40");
+
             //get parent of the object
             if (other.transform.parent != null)
             {
@@ -89,22 +108,39 @@ public class BikeScript : MonoBehaviour
 
         else if (other.gameObject.tag == "Speed60")
         {
+            var parent = other.transform.parent.gameObject;
+            if (parent.GetComponent<TrafficSignScript>() != null)
+            {
+                if (parent.GetComponent<TrafficSignScript>().hasEntered)
+                {
+                    return;
+                }
+            }
             Debug.Log("Speed60");
             Time.timeScale = speedMulplier60;
             //get parent of the object
-            var parent = other.transform.parent.gameObject;
+
             //destroy parent
             if (parent.GetComponent<TrafficSignScript>() != null)
                 parent.GetComponent<TrafficSignScript>().ZoomEffect();
+            parent.GetComponent<TrafficSignScript>().hasEntered = true;
 
         }
 
         else if (other.gameObject.tag == "Speed80")
         {
+            var parent = other.transform.parent.gameObject;
+            if (parent.GetComponent<TrafficSignScript>() != null)
+            {
+                if (parent.GetComponent<TrafficSignScript>().hasEntered)
+                {
+                    return;
+                }
+            }
             Debug.Log("Speed80");
             Time.timeScale = speedMulplier80;
             //get parent of the object
-            var parent = other.transform.parent.gameObject;
+
             //destroy parent
             if (parent.GetComponent<TrafficSignScript>() != null)
                 parent.GetComponent<TrafficSignScript>().ZoomEffect();

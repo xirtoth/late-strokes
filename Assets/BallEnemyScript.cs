@@ -59,7 +59,8 @@ public class BallEnemyScript : MonoBehaviour
         dieSplash.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
         //but higher than background
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
-
+        var gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        gc.GetComponent<GameController>().EnemyKilled();
         //canvas.GetComponent<SpriteTextureGenerator>().AddColorSplash(Color.red, 5);
 
         //destroy the enemy
@@ -107,10 +108,15 @@ public class BallEnemyScript : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             bounces++;
-            //bounce 
-            rb.AddForce(collision.contacts[0].normal * bounceForce, ForceMode2D.Impulse);
-
+            // Adjust the bounce force based on the time scale
+            float adjustedBounceForce = bounceForce / Time.timeScale;
+            // Bounce
+            rb.AddForce(collision.contacts[0].normal * adjustedBounceForce, ForceMode2D.Impulse);
+            // Limit the speed
+            if (rb.velocity.magnitude > 15)
+            {
+                rb.velocity = rb.velocity.normalized * 15;
+            }
         }
-
     }
 }

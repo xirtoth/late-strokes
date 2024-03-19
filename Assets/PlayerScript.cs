@@ -25,6 +25,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject canvas;
 
 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -116,6 +117,8 @@ public class PlayerScript : MonoBehaviour
         if (col.gameObject.tag == "Drug")
         {
             canvas.GetComponent<ShaderTurner>().TurnRainbow();
+            gc.GetComponent<GameController>().canSpawnPowerUp = false;
+            Destroy(col.gameObject);
         }
     }
 

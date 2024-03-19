@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destroyer : MonoBehaviour
+public class BulletScript : MonoBehaviour
 {
-    public float aliveTime = 2f;
+    // Start is called before the first frame update
     void Start()
     {
-
+        Destroy(gameObject, 2f);
     }
 
     // Update is called once per frame
@@ -19,17 +19,23 @@ public class Destroyer : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.tag == "Wall")
+        {
+            Destroy(gameObject);
+        }
+
         if (other.gameObject.tag == "Enemy")
         {
             if (other.gameObject.GetComponent<EnemyScript>() != null)
             {
                 other.gameObject.GetComponent<EnemyScript>().TakeDamage();
+                Destroy(gameObject);
             }
             else if (other.gameObject.GetComponent<BallEnemyScript>() != null)
             {
                 other.gameObject.GetComponent<BallEnemyScript>().TakeDamage();
 
-                //Destroy(gameObject);
+                Destroy(gameObject);
             }
         }
     }

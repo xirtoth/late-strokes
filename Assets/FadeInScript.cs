@@ -20,7 +20,8 @@ public class FadeInScript : MonoBehaviour
     private IEnumerator FadeIn()
     {
 
-        var maxScale = 8f;
+        var maxScale = 6f;
+        var randomScale = Random.Range(1f, maxScale);
         var scaleAmount = 0.9f;
         //scale from 0 to 1
         for (float f = 0.05f; f <= 1; f += 0.05f)
@@ -29,8 +30,8 @@ public class FadeInScript : MonoBehaviour
             c.a = f;
             GetComponent<Renderer>().material.color = c;
             transform.localScale += new Vector3(scaleAmount, scaleAmount, scaleAmount);
-            if (transform.localScale.x > maxScale)
-                transform.localScale = new Vector3(maxScale, maxScale, maxScale);
+            if (transform.localScale.x > randomScale)
+                transform.localScale = new Vector3(randomScale, randomScale, randomScale);
             yield return new WaitForSeconds(0.01f);
         }
         // also use localScale for scaling

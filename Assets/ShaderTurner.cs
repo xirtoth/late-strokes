@@ -6,9 +6,12 @@ public class ShaderTurner : MonoBehaviour
 {
     public Material defaultMaterial;
     public Material rainbowMaterial;
+
+    private GameObject gc;
     void Start()
     {
         GetComponent<SpriteRenderer>().material = defaultMaterial;
+        gc = GameObject.Find("GameController");
     }
 
     // Update is called once per frame
@@ -21,11 +24,25 @@ public class ShaderTurner : MonoBehaviour
     {
         Debug.Log("TurnRainbow");
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Debug.Log("enemies: " + enemies.Length);
         GetComponent<SpriteRenderer>().material = rainbowMaterial;
         StartCoroutine(TurnRainbowOff());
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<EnemyScript>().TakeDamage();
+
+            //check if enemy is null
+            if (enemy == null)
+            {
+                continue;
+            }
+            if (enemy.GetComponent<EnemyScript>() != null)
+            {
+                enemy.GetComponent<EnemyScript>().TakeDamage();
+            }
+            else
+            {
+                enemy.GetComponent<BallEnemyScript>().TakeDamage();
+            }
         }
     }
 
@@ -38,5 +55,6 @@ public class ShaderTurner : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         TurnDefault();
+        gc.GetComponent<GameController>().canSpawnPowerUp = true;
     }
 }

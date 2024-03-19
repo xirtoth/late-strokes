@@ -116,7 +116,8 @@ public class EnemyScript : MonoBehaviour
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
 
         //canvas.GetComponent<SpriteTextureGenerator>().AddColorSplash(Color.red, 5);
-
+        var gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        gc.GetComponent<GameController>().EnemyKilled();
         //destroy the enemy
         Destroy(gameObject);
     }
@@ -134,7 +135,7 @@ public class EnemyScript : MonoBehaviour
             Color c = GetComponent<SpriteRenderer>().material.color;
             c.a = f;
             GetComponent<SpriteRenderer>().material.color = c;
-            Debug.Log("fading. " + f);
+
             //also scale down
             transform.localScale = new Vector3(transform.localScale.x - 0.1f, transform.localScale.y - 0.1f, 1);
             //if scale is < 0 then break
