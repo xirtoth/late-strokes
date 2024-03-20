@@ -1130,7 +1130,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nrxt level
+  m_Text: Next level
 --- !u!222 &505334019
 CanvasRenderer:
   m_ObjectHideFlags: 0

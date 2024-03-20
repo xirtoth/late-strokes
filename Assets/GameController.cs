@@ -199,9 +199,9 @@ public class GameController : MonoBehaviour
                 GetComponent<UIcontroller>().myText.text += "Your grade is B. Congratulations! You have passed to next level!";
                 nextLevelButton.SetActive(true);
                 break;
-            case float n when (n < 70):
-                GetComponent<UIcontroller>().myText.text += "Your grade is C. You need atleast C to pass to next level. Try again!";
-
+            case float n when (n < 60):
+                GetComponent<UIcontroller>().myText.text += "Your grade is C. Congratulations! You have passed to next level!";
+                nextLevelButton.SetActive(true);
                 break;
             case float n when (n < 80):
                 GetComponent<UIcontroller>().myText.text += "Your grade is D. You need atleast C to pass to next level. Try again!";

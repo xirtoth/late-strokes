@@ -13,7 +13,20 @@ public class MenuController : MonoBehaviour
     public void StartGame()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 0.5f);
+    }
+
+
+    private IEnumerator StartGameCoroutine()
+    {
+        Debug.Log("AudioListener.volume: " + AudioListener.volume);
+        while (AudioListener.volume > 0.01f)
+        {
+            AudioListener.volume -= 0.1f;
+            Debug.Log("AudioListener.volume: " + AudioListener.volume);
+            yield return new WaitForSeconds(0.3f);
+        }
+        // load the game scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
     }
 
     public void QuitGame()
@@ -47,6 +60,8 @@ public class MenuController : MonoBehaviour
         PlayerPrefs.SetFloat("Volume", volume);
         PlayerPrefs.Save();
     }
+
+
 
 
 }
