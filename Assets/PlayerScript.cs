@@ -10,7 +10,7 @@ public class PlayerScript : MonoBehaviour
 
     public float moveSpeed = 10f;
 
-    public float dashForce = 10f;
+    public float dashForce = 1000f;
 
     public GameObject bulletPrefab;
 
@@ -48,6 +48,27 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (transform.position.x > 6.1F)
+        {
+            transform.position = new Vector2(6.1f, transform.position.y);
+        }
+
+        if (transform.position.x < -9.7F)
+        {
+            transform.position = new Vector2(-9.7f, transform.position.y);
+        }
+
+        if (transform.position.y > 3.3F)
+        {
+            transform.position = new Vector2(transform.position.x, 3.3f);
+        }
+
+        if (transform.position.y < -4.8F)
+        {
+            transform.position = new Vector2(transform.position.x, -4.8f);
+        }
+
+
         //use input getaxis to move the player
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
@@ -80,6 +101,18 @@ public class PlayerScript : MonoBehaviour
         {
             // Disable the collider when the player is not attacking
             brush.GetComponent<Collider2D>().enabled = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            //move player 1f towards mouse position without rigidbody
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
+            transform.position = Vector2.MoveTowards(transform.position, mousePos, 4f);
+
+
+
         }
 
 
@@ -154,7 +187,7 @@ public class PlayerScript : MonoBehaviour
             {
                 //if its 1 unit near to player in circular radius then destroy it
 
-                if (Vector3.Distance(splash.transform.position, transform.position) < 4f)
+                if (Vector3.Distance(splash.transform.position, transform.position) < 2f)
                 {
                     Destroy(splash);
 

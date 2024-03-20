@@ -20,6 +20,11 @@ public class BikeScript : MonoBehaviour
     Vector3 movingDirection;
     public List<Sprite> dieSpash = new List<Sprite>();
 
+    public Texture2D speed40;
+    public Texture2D speed60;
+    public Texture2D speed80;
+    public Texture2D roadBump;
+
 
     // Start is called before the first frame update
     private void Start()
@@ -70,6 +75,7 @@ public class BikeScript : MonoBehaviour
                     parent.GetComponent<TrafficSignScript>().hasEntered = true;
                 }
             }
+            ShowRoadSign("RoadBump");
         }
         else if (other.gameObject.tag == "Rainbow")
         {
@@ -88,7 +94,10 @@ public class BikeScript : MonoBehaviour
 
 
             transform.Rotate(0, 0, oldRotation - 90);
+            StartCoroutine("TurnCamera");
             movingDirection = transform.up;
+            //flip whole scene 90 degrees
+
             //load next level
 
         }
@@ -113,6 +122,8 @@ public class BikeScript : MonoBehaviour
             }
             parent.GetComponent<TrafficSignScript>().hasEntered = true;
             Time.timeScale = speedMultiplier40;
+
+            ShowRoadSign("Speed40");
         }
 
         else if (other.gameObject.tag == "Speed60")
@@ -135,6 +146,9 @@ public class BikeScript : MonoBehaviour
                 parent.GetComponent<TrafficSignScript>().ZoomEffect();
             parent.GetComponent<TrafficSignScript>().hasEntered = true;
 
+
+            ShowRoadSign("Speed60");
+
         }
 
         else if (other.gameObject.tag == "Speed80")
@@ -156,6 +170,9 @@ public class BikeScript : MonoBehaviour
             //destroy parent
             if (parent.GetComponent<TrafficSignScript>() != null)
                 parent.GetComponent<TrafficSignScript>().ZoomEffect();
+
+            ShowRoadSign("Speed80");
+
         }
         else if (other.gameObject.tag == "Finish")
         {
@@ -189,5 +206,70 @@ public class BikeScript : MonoBehaviour
             /* Time.timeScale = 1;
              Debug.Log("Speed40 eneded");*/
         }
+    }
+
+
+    private void ShowRoadSign(string sign)
+    {
+        //instantiate road sign to middle of screen with transparency and fade it out
+        GameObject roadSign = new GameObject();
+        roadSign.AddComponent<SpriteRenderer>();
+        switch (sign)
+        {
+            case "Speed40":
+                roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(speed40, new Rect(0, 0, speed40.width, speed40.height), new Vector2(0.5f, 0.5f), 100.0f);
+                break;
+            case "Speed60":
+                roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(speed60, new Rect(0, 0, speed60.width, speed60.height), new Vector2(0.5f, 0.5f), 100.0f);
+                break;
+            case "Speed80":
+                roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(speed80, new Rect(0, 0, speed80.width, speed80.height), new Vector2(0.5f, 0.5f), 100.0f);
+                break;
+            case "RoadBump":
+                roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(roadBump, new Rect(0, 0, roadBump.width, roadBump.height), new Vector2(0.5f, 0.5f), 100.0f);
+                break;
+        }
+        roadSign.transform.position = new Vector3(-2f, 0, 0);
+        //roadSign.AddComponent<FadeInScript>();
+        roadSign.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.2f);
+        roadSign.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        roadSign.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
+        //scale it up
+        roadSign.transform.localScale = new Vector3(10f, 10f, 1);
+        Destroy(roadSign, 4);
+        //fadeout
+
+    }
+
+
+    private IEnumerator TurnCamera()
+    {
+        Camera cam = Camera.main;
+        float duration = 8f; // Duration of the turn
+        float halfDuration = duration / 2f; // Halfway point
+        float startRotation = cam.transform.eulerAngles.z; // Starting rotation
+        float endRotation = startRotation + 45f; // Ending rotation
+
+        // Rotate to 45 degrees
+        for (float t = 0; t < halfDuration; t += Time.deltaTime)
+        {
+            float zRotation = Mathf.Lerp(startRotation, endRotation, t / halfDuration);
+            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, zRotation);
+            yield return null;
+        }
+
+        // Ensure the rotation is exactly 45 degrees
+        cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, endRotation);
+
+        // Rotate back to original rotation
+        for (float t = 0; t < halfDuration; t += Time.deltaTime)
+        {
+            float zRotation = Mathf.Lerp(endRotation, startRotation, t / halfDuration);
+            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, zRotation);
+            yield return null;
+        }
+
+        // Ensure the rotation is exactly the original rotation
+        transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, startRotation);
     }
 }

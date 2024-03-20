@@ -145,7 +145,7 @@ public class GameController : MonoBehaviour
         foreach (var screenshot in screenShots)
         {
             InstantiateScreenshot(screenshot);
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(0.5f);
             Debug.Log("displayed screenshot " + screenShots.IndexOf(screenshot) + " of " + screenShots.Count);
         }
         //calculate white pixels of last screenshot
