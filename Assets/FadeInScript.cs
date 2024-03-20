@@ -20,7 +20,7 @@ public class FadeInScript : MonoBehaviour
     private IEnumerator FadeIn()
     {
 
-        var maxScale = 6f;
+        var maxScale = 7f;
         var randomScale = Random.Range(1f, maxScale);
         var scaleAmount = 0.9f;
         //scale from 0 to 1
@@ -37,5 +37,25 @@ public class FadeInScript : MonoBehaviour
         // also use localScale for scaling
 
 
+    }
+
+    public void StartFadeOut()
+    {
+        //start fade out
+        StartCoroutine(FadeOut());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        //fade out
+        for (float f = 1f; f >= -0.05f; f -= 0.01f) // Decrease f by a smaller amount to make the fade out slower
+        {
+            Color c = GetComponent<Renderer>().material.color;
+            c.a = f;
+            GetComponent<Renderer>().material.color = c;
+            yield return new WaitForSeconds(0.3f); // Increase the wait time to make the fade out slower
+        }
+        //destroy the gameobject
+        Destroy(gameObject);
     }
 }

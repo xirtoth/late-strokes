@@ -61,6 +61,7 @@ public class BallEnemyScript : MonoBehaviour
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
         //set layer to 9
         dieSplash.layer = 9;
+        dieSplash.tag = "Splash";
         var gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         gc.GetComponent<GameController>().EnemyKilled();
         //canvas.GetComponent<SpriteTextureGenerator>().AddColorSplash(Color.red, 5);

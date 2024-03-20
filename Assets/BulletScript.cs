@@ -31,6 +31,10 @@ public class BulletScript : MonoBehaviour
             //set layer to Capture
             splash.layer = 9;
 
+            splash.tag = "Splash";
+
+            // splash.AddComponent<FadeInScript>();
+
             // Set the scale to 0.1, 0.1, 1
             var randomScale = Random.Range(0.1f, 0.3f);
             splash.transform.localScale = new Vector3(randomScale, randomScale, 1f);
@@ -44,6 +48,7 @@ public class BulletScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
         {
+            // change direction to opposite
             Destroy(gameObject);
         }
 

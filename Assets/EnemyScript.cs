@@ -128,6 +128,8 @@ public class EnemyScript : MonoBehaviour
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
         //set layer to capture
         dieSplash.layer = 9;
+        dieSplash.tag = "Splash";
+
 
         //canvas.GetComponent<SpriteTextureGenerator>().AddColorSplash(Color.red, 5);
         var gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();

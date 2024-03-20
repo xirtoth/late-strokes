@@ -144,9 +144,22 @@ public class PlayerScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.tag == "Enemy" && !gameObject.CompareTag("Weapon"))
         {
-            TakeDamage(10);
+            Debug.Log("Enemy hit +" + col.gameObject.name + " at " + gameObject.tag);
+            //find all nearby object tagged as splash
+            GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");
+            Debug.Log("found splashes" + splashes.Length);
+            foreach (GameObject splash in splashes)
+            {
+                //if its 1 unit near to player in circular radius then destroy it
+
+                if (Vector3.Distance(splash.transform.position, transform.position) < 4f)
+                {
+                    Destroy(splash);
+
+                }
+            }
         }
     }
 
