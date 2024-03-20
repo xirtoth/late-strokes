@@ -37,7 +37,7 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        //   InvokeRepeating("SpawnEnemies", 2.0f, 5.0f);
+        InvokeRepeating("SpawnEnemies", 2.0f, 5.0f);
     }
 
     // Update is called once per frame

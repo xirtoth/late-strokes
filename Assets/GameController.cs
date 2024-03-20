@@ -54,35 +54,35 @@ public class GameController : MonoBehaviour
     }
     private void StartCountingWhitePixels(Texture2D screenshot)
     {
-        // Find the kernel in the compute shader
+
         int kernelHandle = computeShader.FindKernel("CSMain");
 
-        // Create a buffer to store the result
-        ComputeBuffer resultBuffer = new ComputeBuffer(1, sizeof(int));
-        int[] resultData = new int[1] { 0 }; // Initialize result data to zero
 
-        // Set the initial data of the buffer to zero
+        ComputeBuffer resultBuffer = new ComputeBuffer(1, sizeof(int));
+        int[] resultData = new int[1] { 0 };
+
+
         resultBuffer.SetData(resultData);
 
-        // Set the input texture and result buffer for the compute shader
+
         computeShader.SetTexture(kernelHandle, "inputTexture", screenshot);
         computeShader.SetBuffer(kernelHandle, "result", resultBuffer);
 
-        // Calculate the number of thread groups
+
         int threadGroupSizeX = 8;
         int threadGroupSizeY = 8;
         int dispatchSizeX = (screenshot.width + threadGroupSizeX - 1) / threadGroupSizeX;
         int dispatchSizeY = (screenshot.height + threadGroupSizeY - 1) / threadGroupSizeY;
 
-        // Dispatch the compute shader
+
         computeShader.Dispatch(kernelHandle, dispatchSizeX, dispatchSizeY, 1);
 
-        // Read the result back from the buffer
+
         resultBuffer.GetData(resultData);
         Debug.Log("White pixel percentage: " + (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100 + "%");
         var prosent = (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100;
         GetComponent<UIcontroller>().precentangeText.text = prosent.ToString() + "%";
-        // Release the buffer
+
         resultBuffer.Release();
     }
     private IEnumerator CountWhitePixels(Texture2D screenshot)
