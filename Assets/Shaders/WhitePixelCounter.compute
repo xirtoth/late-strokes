@@ -9,11 +9,8 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     // Read pixel color from input texture
     float4 pixelColor = inputTexture.Load(int3(id.xy, 0));
 
-    // Check if the pixel is white (within a certain tolerance)
-    float tolerance = 0.01f;
-    if (abs(pixelColor.r - 1.0) < tolerance &&
-        abs(pixelColor.g - 1.0) < tolerance &&
-        abs(pixelColor.b - 1.0) < tolerance)
+    // Check if the pixel is white
+    if (pixelColor.r == 1.0 && pixelColor.g == 1.0 && pixelColor.b == 1.0 && pixelColor.a == 1.0)
     {
         // Increment the counter in the result buffer
         InterlockedAdd(result[0], 1);

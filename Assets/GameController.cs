@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
+
 
 
 public class GameController : MonoBehaviour
@@ -16,6 +20,10 @@ public class GameController : MonoBehaviour
 
     private bool doneCalculating = false;
 
+    public GameObject UI;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +31,7 @@ public class GameController : MonoBehaviour
 
         Vector3 min = bounds.min;
         Vector3 max = bounds.max;
+
 
 
     }
@@ -50,7 +59,10 @@ public class GameController : MonoBehaviour
 
         // Create a buffer to store the result
         ComputeBuffer resultBuffer = new ComputeBuffer(1, sizeof(int));
-        int[] resultData = new int[1];
+        int[] resultData = new int[1] { 0 }; // Initialize result data to zero
+
+        // Set the initial data of the buffer to zero
+        resultBuffer.SetData(resultData);
 
         // Set the input texture and result buffer for the compute shader
         computeShader.SetTexture(kernelHandle, "inputTexture", screenshot);
@@ -68,7 +80,8 @@ public class GameController : MonoBehaviour
         // Read the result back from the buffer
         resultBuffer.GetData(resultData);
         Debug.Log("White pixel percentage: " + (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100 + "%");
-
+        var prosent = (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100;
+        GetComponent<UIcontroller>().precentangeText.text = prosent.ToString() + "%";
         // Release the buffer
         resultBuffer.Release();
     }

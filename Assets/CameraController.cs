@@ -61,7 +61,7 @@ public class CameraController : MonoBehaviour
         screenshots.Add(tex);
 
         // Save screenshot to file
-        byte[] bytes = tex.EncodeToPNG();
+
         //File.WriteAllBytes(Application.dataPath + "/../Screenshot" + numOfScreenshots + ".png", bytes);
         gameController.GetComponent<GameController>().AddScreenshot(tex);
     }
