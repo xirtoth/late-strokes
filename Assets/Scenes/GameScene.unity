@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 159440595}
   - component: {fileID: 159440594}
   - component: {fileID: 159440596}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Canvas
   m_Icon: {fileID: 0}
@@ -393,7 +393,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -8
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.8584906, g: 0.8415812, b: 0.75725347, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -952,7 +952,7 @@ Camera:
   field of view: 34
   orthographic: 1
   orthographic size: 8.36
-  m_Depth: -5
+  m_Depth: -5.03
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -995,6 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 159440592}
+  secondCamera: {fileID: 774656297}
 --- !u!1 &520082041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,6 +1564,7 @@ GameObject:
   - component: {fileID: 721722090}
   - component: {fileID: 721722091}
   - component: {fileID: 721722092}
+  - component: {fileID: 721722093}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -1625,6 +1627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 159440592}
+  secondCamera: {fileID: 774656297}
 --- !u!82 &721722088
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1861,6 +1864,112 @@ MonoBehaviour:
   - {fileID: 4342211731221691351, guid: 86e45311777c90049b13359b1373f174, type: 3}
   canvas: {fileID: 159440592}
   canSpawnPowerUp: 1
+  computeShader: {fileID: 7200000, guid: 5caf6811173fe4b4196ef0cb69a5b469, type: 3}
+  screenShots: []
+--- !u!114 &721722093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721722084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ade8497ea9767854bb2d3c3059d6ee10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &774656295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 774656298}
+  - component: {fileID: 774656297}
+  - component: {fileID: 774656296}
+  m_Layer: 0
+  m_Name: SecondCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &774656296
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774656295}
+  m_Enabled: 1
+--- !u!20 &774656297
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774656295}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5.3060875
+  m_Depth: -7
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 512
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &774656298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774656295}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.75, y: -0.71, z: -2.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &815409668
 GameObject:
   m_ObjectHideFlags: 0
@@ -4321,3 +4430,4 @@ SceneRoots:
   - {fileID: 4021218624960045946}
   - {fileID: 706769912}
   - {fileID: 1829209423}
+  - {fileID: 774656298}

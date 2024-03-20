@@ -1,0 +1,21 @@
+#pragma kernel CSMain
+
+RWStructuredBuffer<int> result; // Buffer to store the result
+Texture2D<float4> inputTexture; // Input texture (screenshot)
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    // Read pixel color from input texture
+    float4 pixelColor = inputTexture.Load(int3(id.xy, 0));
+
+    // Check if the pixel is white (within a certain tolerance)
+    float tolerance = 0.01f;
+    if (abs(pixelColor.r - 1.0) < tolerance &&
+        abs(pixelColor.g - 1.0) < tolerance &&
+        abs(pixelColor.b - 1.0) < tolerance)
+    {
+        // Increment the counter in the result buffer
+        InterlockedAdd(result[0], 1);
+    }
+}
