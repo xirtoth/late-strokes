@@ -25,6 +25,8 @@ public class Spawner : MonoBehaviour
 
     public GameObject ballEnemySpawn;
 
+    public GameObject playArea;
+
     //declare 5 spawnpoints public
     [SerializeField]
     public List<GameObject> spawnPoints = new List<GameObject>();
@@ -37,7 +39,7 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("SpawnEnemies", 2.0f, 5.0f);
+        InvokeRepeating("SpawnAtEdges", 2.0f, 5.0f);
     }
 
     // Update is called once per frame
@@ -65,6 +67,36 @@ public class Spawner : MonoBehaviour
               int spawnType = Random.Range(0, 3);
               StartCoroutine(SpawnEnemy((SpawnType)spawnType, enemyType));
           }*/
+    }
+
+    public void SpawnAtEdges()
+    {
+        //spawn enemies at canvas edges
+        //get canvas bounds
+        Bounds bounds = playArea.GetComponent<SpriteRenderer>().bounds;
+        Vector3 min = bounds.min;
+        Vector3 max = bounds.max;
+        //spawn enemies at edges
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 position = new Vector3();
+            switch (i)
+            {
+                case 0:
+                    position = new Vector3(min.x, Random.Range(min.y, max.y), 0);
+                    break;
+                case 1:
+                    position = new Vector3(max.x, Random.Range(min.y, max.y), 0);
+                    break;
+                case 2:
+                    position = new Vector3(Random.Range(min.x, max.x), min.y, 0);
+                    break;
+                case 3:
+                    position = new Vector3(Random.Range(min.x, max.x), max.y, 0);
+                    break;
+            }
+            InstantiateEnemy(Random.Range(0, 3), position);
+        }
     }
     public void SpawnBalls()
     {

@@ -10,11 +10,13 @@ public class PlayerScript : MonoBehaviour
 
     public float moveSpeed = 10f;
 
+    public float dashForce = 10f;
+
     public GameObject bulletPrefab;
 
-    public float bulletVelocity = 50f;
+    public float bulletVelocity = 10f;
 
-    private Vector2 movement;
+
     public float shootCooldown = 0.5f;
 
     public float health = 100f;
@@ -23,6 +25,13 @@ public class PlayerScript : MonoBehaviour
     public GameObject gc;
 
     public GameObject canvas;
+    private Vector2 movement;
+
+    private GameObject brush;
+
+    private Animation anim;
+
+
 
 
 
@@ -31,6 +40,9 @@ public class PlayerScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         gc = GameObject.FindGameObjectWithTag("GameController");
         canvas = GameObject.FindGameObjectWithTag("Canvas");
+        //get brush it is child of this gameobject
+        brush = transform.GetChild(0).gameObject;
+
     }
 
     // Update is called once per frame
@@ -45,17 +57,31 @@ public class PlayerScript : MonoBehaviour
         // shoot towards mouse position
         if (Input.GetMouseButton(0))
         {
+            Debug.Log(brush.name);
             if (Time.time < shootCooldown)
             {
                 return;
             }
             shootCooldown = Time.time + 0.5f;
 
+            // Enable the collider when the player is attacking
+            brush.GetComponent<Collider2D>().enabled = true;
 
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 direction = (mousePos - transform.position).normalized;
+            brush.GetComponent<Animation>().Play("Swing");
+
+
+            // also shoot bullet towards mouse position
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
             ShootBullet(direction);
+
         }
+        else
+        {
+            // Disable the collider when the player is not attacking
+            brush.GetComponent<Collider2D>().enabled = false;
+        }
+
 
 
 
@@ -75,13 +101,25 @@ public class PlayerScript : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+        //when player is moving make it rotate to left and right rapidly using sin
+        if (movement.x != 0 || movement.y != 0)
+        {
+
+            transform.rotation *= Quaternion.Euler(0, 0, 5 * Mathf.Sin(Time.time * 20));
+
+
+        }
     }
 
     private void ShootBullet(Vector2 direction)
     {
 
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        //make Time.timescale not affect bullet speed
+
         bullet.GetComponent<Rigidbody2D>().velocity = direction * bulletVelocity;
+        //change bullet to random colour
+        bullet.GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value, 1);
 
 
 

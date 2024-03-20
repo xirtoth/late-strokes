@@ -58,6 +58,7 @@ public class BikeScript : MonoBehaviour
             cam.GetComponent<CameraController>().ShakeCamera(2f, 0.2f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
             gc.GetComponent<Spawner>().SpawnBalls();
+            cam.GetComponent<CameraController>().TakeSCreenshot();
             if (other.transform.parent != null)
             {
                 //get parent of the object
@@ -94,15 +95,23 @@ public class BikeScript : MonoBehaviour
         else if (other.gameObject.tag == "Speed40")
         {
 
-            //get parent of the object
+            var parent = other.transform.parent.gameObject;
+            if (parent.GetComponent<TrafficSignScript>() != null)
+            {
+                if (parent.GetComponent<TrafficSignScript>().hasEntered)
+                {
+                    return;
+                }
+            }
             if (other.transform.parent != null)
             {
                 //get parent of the object
-                var parent = other.transform.parent.gameObject;
+
                 //destroy parent
                 if (parent.GetComponent<TrafficSignScript>() != null)
                     parent.GetComponent<TrafficSignScript>().ZoomEffect();
             }
+            parent.GetComponent<TrafficSignScript>().hasEntered = true;
             Time.timeScale = speedMultiplier40;
         }
 
@@ -117,6 +126,7 @@ public class BikeScript : MonoBehaviour
                 }
             }
             Debug.Log("Speed60");
+            cam.GetComponent<CameraController>().TakeSCreenshot();
             Time.timeScale = speedMulplier60;
             //get parent of the object
 
@@ -139,17 +149,33 @@ public class BikeScript : MonoBehaviour
             }
             Debug.Log("Speed80");
             Time.timeScale = speedMulplier80;
+            cam.GetComponent<CameraController>().TakeSCreenshot();
+            parent.GetComponent<TrafficSignScript>().hasEntered = true;
             //get parent of the object
 
             //destroy parent
             if (parent.GetComponent<TrafficSignScript>() != null)
                 parent.GetComponent<TrafficSignScript>().ZoomEffect();
         }
+        else if (other.gameObject.tag == "Finish")
+        {
+
+            Debug.Log("Finish");
+            //take screenshot
+            cam.GetComponent<CameraController>().TakeSCreenshot();
+            StartCoroutine("Finish");
+
+        }
 
         //  cam.GetComponent<CameraController>().ShakeCamera(2f, 0.5f);
         //  AudioManager.Instance.PlayAudio(Sound.HitBump);
     }
 
+    private IEnumerator Finish()
+    {
+        yield return new WaitForSeconds(2);
+        gc.GetComponent<GameController>().Finish();
+    }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == "Rainbow")

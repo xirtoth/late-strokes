@@ -18,21 +18,25 @@ public class CameraController : MonoBehaviour
 
     private int width = 800;
     private int height = 600;
+
+    public Texture2D cursor;
     private void Start()
     {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //every 5 seconds take a screenshot
-        if (Time.time % 5 < 0.1)
-        {
-            StartCoroutine(CaptureScreenshotAsync());
-            Debug.Log("Screenshot taken");
-            numOfScreenshots++;
-        }
+
+    }
+
+    public void TakeSCreenshot()
+    {
+        StartCoroutine(CaptureScreenshotAsync());
+        Debug.Log("Screenshot taken");
+        numOfScreenshots++;
     }
 
     private IEnumerator CaptureScreenshotAsync()

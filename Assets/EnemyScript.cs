@@ -48,9 +48,9 @@ public class EnemyScript : MonoBehaviour
         //set this to children of canvas
         //find gameobject with tag canvas
         //set scale to random between 1 and 5   
-        randomScale = Random.Range(1f, 2.5f);
+        randomScale = Random.Range(0.6f, 1.5f);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
-        moveSpeed = Random.Range(1f, 4f);
+        moveSpeed = Random.Range(1f, 2f);
         initialPosition = transform.position;
 
     }
@@ -81,6 +81,18 @@ public class EnemyScript : MonoBehaviour
 
         // Apply the movement to the enemy
         rb.velocity = movement;
+
+        //rotate enemy left and right based on movement
+        if (movement.x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        //wave enemy left and right rotation using isn
+        transform.rotation *= Quaternion.Euler(0, 0, Mathf.Sin(Time.time * frequency) * amplitude);
     }
 
 

@@ -10,6 +10,11 @@ public class UIcontroller : MonoBehaviour
     public Slider healthBar;
     public Text precentangeText;
 
+    public TextMeshProUGUI myText;
+
+    //public textmesh pro
+
+
 
 
 
@@ -18,6 +23,8 @@ public class UIcontroller : MonoBehaviour
 
         healthBar.value = v;
     }
+
+
 
     // Start is called before the first frame update
     void Start()

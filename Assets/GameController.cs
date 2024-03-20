@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
+using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 
 
 
@@ -22,6 +24,14 @@ public class GameController : MonoBehaviour
 
     public GameObject UI;
 
+    private float prosent;
+
+    private float timeToCalculatePixels = 5;
+
+    public GameObject finishSquare;
+
+    private Camera cam;
+    private int screenshots = 0;
 
 
     // Start is called before the first frame update
@@ -31,6 +41,7 @@ public class GameController : MonoBehaviour
 
         Vector3 min = bounds.min;
         Vector3 max = bounds.max;
+        cam = Camera.main;
 
 
 
@@ -39,13 +50,24 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (screenShots.Count > 0)
+            Application.Quit();
+        }
+        if (Time.time > timeToCalculatePixels)
+        {
+            timeToCalculatePixels += 5;
+            StartCoroutine(CountWhitePixels(screenShots[screenShots.Count - 1]));
+            if (prosent > 90)
             {
-                StartCountingWhitePixels(screenShots[screenShots.Count - 1]);
-            }
 
+                Debug.Log("Spawning balls");
+
+            }
+            else
+            {
+                Debug.Log(prosent);
+            }
         }
 
         //every 5 second take latest screenshot from gamecontroller
@@ -80,7 +102,7 @@ public class GameController : MonoBehaviour
 
         resultBuffer.GetData(resultData);
         Debug.Log("White pixel percentage: " + (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100 + "%");
-        var prosent = (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100;
+        prosent = (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100;
         GetComponent<UIcontroller>().precentangeText.text = prosent.ToString() + "%";
 
         resultBuffer.Release();
@@ -111,6 +133,7 @@ public class GameController : MonoBehaviour
         }
 
         Debug.Log("Screenshot has " + whitePixels + " white pixels, which is " + (whitePixels / (float)(pixels.Length)) * 100 + "% of the total pixels");
+        prosent = (whitePixels / (float)(pixels.Length)) * 100;
         yield return new WaitForSecondsRealtime(1);
         Debug.Log("Time taken to calculate white pixels: " + (Time.realtimeSinceStartup - starTime) + " seconds");
         doneCalculating = true;
@@ -118,28 +141,62 @@ public class GameController : MonoBehaviour
     private IEnumerator DisplayScreenshots()
     {
         Time.timeScale = 0;
+        Debug.Log("total screenshots: " + screenShots.Count);
         foreach (var screenshot in screenShots)
         {
-            //read each white pixels of screenshot and what %
-            var whitePixels = 0;
-            float tolerance = 0.01f; // Define a small tolerance value
-            for (int x = 0; x < screenshot.width; x++)
-            {
-                for (int y = 0; y < screenshot.height; y++)
-                {
-                    Color pixelColor = screenshot.GetPixel(x, y);
-                    if (Mathf.Abs(pixelColor.r - 1) < tolerance &&
-                        Mathf.Abs(pixelColor.g - 1) < tolerance &&
-                        Mathf.Abs(pixelColor.b - 1) < tolerance)
-                    {
-                        whitePixels++;
-                    }
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-            Debug.Log("Screenshot has " + whitePixels + " white pixels, which is " + (whitePixels / (float)(screenshot.width * screenshot.height)) * 100 + "% of the total pixels");
+            InstantiateScreenshot(screenshot);
             yield return new WaitForSecondsRealtime(1);
+            Debug.Log("displayed screenshot " + screenShots.IndexOf(screenshot) + " of " + screenShots.Count);
         }
+        //calculate white pixels of last screenshot
+        StartCoroutine(CountWhitePixels(screenShots[screenShots.Count - 1]));
+        Debug.Log("done displaying screenshots last screenshot has " + prosent + "% white pixels");
+        StartCoroutine(TextTyper());
+
+
+    }
+
+    private IEnumerator TextTyper()
+    {
+        string textToType = "Last screenshot has " + prosent + "% white pixels";
+        foreach (char letter in textToType.ToCharArray())
+        {
+            GetComponent<UIcontroller>().myText.text += letter;
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        yield return new WaitForSecondsRealtime(3);
+        switch (prosent)
+        {
+            case float n when (n < 20):
+                GetComponent<UIcontroller>().myText.text += "Your grade is A";
+                break;
+            case float n when (n < 30):
+                GetComponent<UIcontroller>().myText.text += "Your grade is B";
+                break;
+            case float n when (n < 60):
+                GetComponent<UIcontroller>().myText.text += "Your grade is C";
+                break;
+            case float n when (n < 70):
+                GetComponent<UIcontroller>().myText.text += "Your grade is D";
+                break;
+            default:
+                GetComponent<UIcontroller>().myText.text += "Your grade is F";
+                break;
+        }
+    }
+
+    private void InstantiateScreenshot(Texture2D screenshot)
+    {
+        screenshots++;
+        GameObject screen = new GameObject();
+        screen.AddComponent<SpriteRenderer>();
+        screen.GetComponent<SpriteRenderer>().sprite = Sprite.Create(screenshot, new Rect(0, 0, screenshot.width, screenshot.height), new Vector2(0.5f, 0.5f), 100.0f);
+        screen.transform.position = finishSquare.transform.position;
+        screen.transform.name = "screenshot" + screenShots.IndexOf(screenshot);
+        //order in layer
+        screen.GetComponent<SpriteRenderer>().sortingOrder = screenshots;
+
     }
 
     public void EnemyKilled()
@@ -171,5 +228,14 @@ public class GameController : MonoBehaviour
     public void AddScreenshot(Texture2D tex)
     {
         screenShots.Add(tex);
+    }
+
+    public void Finish()
+    {
+        cam.transform.position = finishSquare.transform.position;
+        cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -10);
+        Time.timeScale = 0;
+        Debug.Log("gc finish");
+        StartCoroutine(DisplayScreenshots());
     }
 }
