@@ -71,13 +71,15 @@ public class Spawner : MonoBehaviour
 
     public void SpawnAtEdges()
     {
-        //spawn enemies at canvas edges
+        //get current scene index
+        int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        Debug.Log("Scene index: " + sceneIndex);
         //get canvas bounds
         Bounds bounds = playArea.GetComponent<SpriteRenderer>().bounds;
         Vector3 min = bounds.min;
         Vector3 max = bounds.max;
-        //spawn enemies at edges
-        for (int i = 0; i < 4; i++)
+        Debug.Log("Spawning " + 4 * sceneIndex + " enemies");
+        for (int i = 0; i < 4 * sceneIndex; i++)
         {
             Vector3 position = new Vector3();
             switch (i)

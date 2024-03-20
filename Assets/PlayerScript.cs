@@ -179,6 +179,9 @@ public class PlayerScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Enemy" && !gameObject.CompareTag("Weapon"))
         {
+            //get scene index
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            var multiplier = 2 * sceneIndex * 0.8f;
             Debug.Log("Enemy hit +" + col.gameObject.name + " at " + gameObject.tag);
             //find all nearby object tagged as splash
             GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");
@@ -187,7 +190,7 @@ public class PlayerScript : MonoBehaviour
             {
                 //if its 1 unit near to player in circular radius then destroy it
 
-                if (Vector3.Distance(splash.transform.position, transform.position) < 2f)
+                if (Vector3.Distance(splash.transform.position, transform.position) < multiplier)
                 {
                     Destroy(splash);
 

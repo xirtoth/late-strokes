@@ -60,7 +60,7 @@ public class BikeScript : MonoBehaviour
                 }
             }
             Debug.Log("RoadBump triggered by " + other.gameObject.name + " at " + Time.time);
-            cam.GetComponent<CameraController>().ShakeCamera(2f, 0.2f);
+            cam.GetComponent<CameraController>().ShakeCamera(1f, 0.1f);
             AudioManager.Instance.PlayAudio(Sound.HitBump);
             gc.GetComponent<Spawner>().SpawnBalls();
             cam.GetComponent<CameraController>().TakeSCreenshot();
@@ -245,7 +245,7 @@ public class BikeScript : MonoBehaviour
     private IEnumerator TurnCamera()
     {
         Camera cam = Camera.main;
-        float duration = 8f; // Duration of the turn
+        float duration = 12f; // Duration of the turn
         float halfDuration = duration / 2f; // Halfway point
         float startRotation = cam.transform.eulerAngles.z; // Starting rotation
         float endRotation = startRotation + 45f; // Ending rotation

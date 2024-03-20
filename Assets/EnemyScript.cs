@@ -123,7 +123,7 @@ public class EnemyScript : MonoBehaviour
         dieSplash.AddComponent<SpriteRenderer>().sprite = randomSplashSprite;
         //sorting order should be lower than enemy
         dieSplash.GetComponent<SpriteRenderer>().sortingOrder = -1;
-        dieSplash.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+        dieSplash.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
         //but higher than background
         dieSplash.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
         //set layer to capture

@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
+using UnityEngine.SceneManagement;
 
 
 
@@ -33,10 +34,18 @@ public class GameController : MonoBehaviour
     private Camera cam;
     private int screenshots = 0;
 
+    public GameObject tryAgainButton;
+    public GameObject nextLevelButton;
+
 
     // Start is called before the first frame update
+    void Awake()
+    {
+        RemoveDontDestroyOnLoad();
+    }
     void Start()
     {
+
         Bounds bounds = canvas.GetComponent<Renderer>().bounds;
 
         Vector3 min = bounds.min;
@@ -45,6 +54,18 @@ public class GameController : MonoBehaviour
 
 
 
+    }
+
+    void RemoveDontDestroyOnLoad()
+    {
+        // Create a new temporary scene
+        Scene tempScene = SceneManager.CreateScene("TempScene");
+
+        // Move the game object to the new scene
+        SceneManager.MoveGameObjectToScene(gameObject, tempScene);
+
+        // Unload the temporary scene
+        SceneManager.UnloadSceneAsync(tempScene);
     }
 
     // Update is called once per frame
@@ -145,12 +166,13 @@ public class GameController : MonoBehaviour
         foreach (var screenshot in screenShots)
         {
             InstantiateScreenshot(screenshot);
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.25f);
             Debug.Log("displayed screenshot " + screenShots.IndexOf(screenshot) + " of " + screenShots.Count);
         }
         //calculate white pixels of last screenshot
         StartCoroutine(CountWhitePixels(screenShots[screenShots.Count - 1]));
-        Debug.Log("done displaying screenshots last screenshot has " + prosent + "% white pixels");
+
+
         StartCoroutine(TextTyper());
 
 
@@ -158,7 +180,8 @@ public class GameController : MonoBehaviour
 
     private IEnumerator TextTyper()
     {
-        string textToType = "Last screenshot has " + prosent + "% white pixels";
+        var filledamount = 100f - prosent;
+        string textToType = "Your masterpiece has " + filledamount + "% of colour in it. ";
         foreach (char letter in textToType.ToCharArray())
         {
             GetComponent<UIcontroller>().myText.text += letter;
@@ -169,20 +192,46 @@ public class GameController : MonoBehaviour
         switch (prosent)
         {
             case float n when (n < 20):
-                GetComponent<UIcontroller>().myText.text += "Your grade is A";
+                GetComponent<UIcontroller>().myText.text += "Your grade is A. Congratulations! You have passed to next level!";
+                nextLevelButton.SetActive(true);
                 break;
-            case float n when (n < 30):
-                GetComponent<UIcontroller>().myText.text += "Your grade is B";
-                break;
-            case float n when (n < 60):
-                GetComponent<UIcontroller>().myText.text += "Your grade is C";
+            case float n when (n < 50):
+                GetComponent<UIcontroller>().myText.text += "Your grade is B. Congratulations! You have passed to next level!";
+                nextLevelButton.SetActive(true);
                 break;
             case float n when (n < 70):
-                GetComponent<UIcontroller>().myText.text += "Your grade is D";
+                GetComponent<UIcontroller>().myText.text += "Your grade is C. You need atleast C to pass to next level. Try again!";
+
+                break;
+            case float n when (n < 80):
+                GetComponent<UIcontroller>().myText.text += "Your grade is D. You need atleast C to pass to next level. Try again!";
                 break;
             default:
-                GetComponent<UIcontroller>().myText.text += "Your grade is F";
+                GetComponent<UIcontroller>().myText.text += "Your grade is F. You need atleast C to pass to next level. Try again!";
                 break;
+        }
+        //add try again button
+        tryAgainButton.SetActive(true);
+    }
+
+    public void Restartlevel()
+    {
+        Time.timeScale = 1;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    public void LoadNextLevel()
+    {
+        Time.timeScale = 1;
+        //get current index
+        int levelToLoad = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1;
+        if (levelToLoad < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(levelToLoad);
+        }
+        else
+        {
+            nextLevelButton.SetActive(false);
         }
     }
 
@@ -206,8 +255,10 @@ public class GameController : MonoBehaviour
         {
             if (canSpawnPowerUp)
             {
-                canSpawnPowerUp = false;
+
                 SpawnPowerUp();
+                enemiesKilled = 0;
+                canSpawnPowerUp = false;
             }
 
         }

@@ -53,7 +53,7 @@ public class ShaderTurner : MonoBehaviour
 
     private IEnumerator TurnRainbowOff()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
         TurnDefault();
         gc.GetComponent<GameController>().canSpawnPowerUp = true;
     }

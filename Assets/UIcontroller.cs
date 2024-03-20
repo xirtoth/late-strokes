@@ -11,6 +11,7 @@ public class UIcontroller : MonoBehaviour
     public Text precentangeText;
 
     public TextMeshProUGUI myText;
+    public Button tryAgainButton;
 
     //public textmesh pro
 
