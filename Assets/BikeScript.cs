@@ -320,6 +320,6 @@ public class BikeScript : MonoBehaviour
         }
 
         // Ensure the rotation is exactly the original rotation
-        transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, startRotation);
+        cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, startRotation);
     }
 }

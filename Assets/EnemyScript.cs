@@ -42,13 +42,14 @@ public class EnemyScript : MonoBehaviour
         // InvokeRepeating("ChangeDirection", 2f, 5f);
         //after 10 seconds call die
         //Invoke("Die", 10f);
-
+        //get level index
+        var lvlIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         Debug.Log(canvas.name);
         //set this to children of canvas
         //find gameobject with tag canvas
         //set scale to random between 1 and 5   
-        randomScale = Random.Range(0.6f, 1.5f);
+        randomScale = Random.Range(0.6f, 1.5f + lvlIndex);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
         // get scene index
         int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;

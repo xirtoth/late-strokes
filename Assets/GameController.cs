@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour
     public GameObject tryAgainButton;
     public GameObject nextLevelButton;
 
+    public TextMeshProUGUI levelText;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -51,6 +53,10 @@ public class GameController : MonoBehaviour
         Vector3 min = bounds.min;
         Vector3 max = bounds.max;
         cam = Camera.main;
+
+        //get level index
+        int levelIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        levelText.text = "Level " + levelIndex;
 
 
 
@@ -227,6 +233,9 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         //get current index
         int levelToLoad = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1;
+
+        //check if the level exists
+
 
 
         // Check if the level exists

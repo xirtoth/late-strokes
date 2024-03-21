@@ -16,6 +16,10 @@ public class BallEnemyScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        //get level index   
+        int levelIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        var scaleAmount = Random.Range(0.6f, 1.5f + levelIndex / 3);
+        transform.localScale = new Vector3(scaleAmount, scaleAmount, 1);
     }
 
     // Update is called once per frame

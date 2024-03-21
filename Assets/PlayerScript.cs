@@ -189,7 +189,7 @@ public class PlayerScript : MonoBehaviour
             }
 
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            var multiplier = 2 * sceneIndex * 0.6f / 2; // Dividing by 2 to slow down the increase
+            var multiplier = 2 * sceneIndex * 0.6f; // Dividing by 2 to slow down the increase
 
             //find all nearby object tagged as splash
             GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");
