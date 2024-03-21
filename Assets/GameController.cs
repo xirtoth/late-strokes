@@ -217,7 +217,9 @@ public class GameController : MonoBehaviour
     public void Restartlevel()
     {
         Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        //get index of this level
+        var index = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(index);
     }
 
     public void LoadNextLevel()
@@ -225,8 +227,12 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         //get current index
         int levelToLoad = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1;
+
+
+        // Check if the level exists
         if (levelToLoad < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings)
         {
+            // Load the level
             UnityEngine.SceneManagement.SceneManager.LoadScene(levelToLoad);
         }
         else

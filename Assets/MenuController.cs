@@ -10,6 +10,13 @@ public class MenuController : MonoBehaviour
     public GameObject optionsPanel;
 
     public Slider volumeSlider;
+
+    public void Start()
+    {
+        //set lvl to 1 in playerprefs
+        PlayerPrefs.SetInt("Level", 1);
+    }
+
     public void StartGame()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");

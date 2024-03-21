@@ -50,7 +50,9 @@ public class EnemyScript : MonoBehaviour
         //set scale to random between 1 and 5   
         randomScale = Random.Range(0.6f, 1.5f);
         transform.localScale = new Vector3(randomScale, randomScale, 1);
-        moveSpeed = Random.Range(1f, 2f);
+        // get scene index
+        int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        moveSpeed = Random.Range(1f, 2f * sceneIndex);
         initialPosition = transform.position;
 
     }

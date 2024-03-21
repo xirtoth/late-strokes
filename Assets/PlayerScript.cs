@@ -31,6 +31,10 @@ public class PlayerScript : MonoBehaviour
 
     private Animation anim;
 
+    private float invulnerableTime = 1f;
+
+    private bool isInvulnerable = false;
+
 
 
 
@@ -179,9 +183,13 @@ public class PlayerScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Enemy" && !gameObject.CompareTag("Weapon"))
         {
-            //get scene index
+            if (isInvulnerable)
+            {
+                return;
+            }
+
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            var multiplier = 2 * sceneIndex * 0.8f;
+            var multiplier = 2 * sceneIndex * 0.6f;
             Debug.Log("Enemy hit +" + col.gameObject.name + " at " + gameObject.tag);
             //find all nearby object tagged as splash
             GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");

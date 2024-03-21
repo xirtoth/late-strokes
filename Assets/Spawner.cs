@@ -71,7 +71,8 @@ public class Spawner : MonoBehaviour
 
     public void SpawnAtEdges()
     {
-        //get current scene index
+        //get lvl from playerprefs
+        //var level = PlayerPrefs.GetInt("Level");
         int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         Debug.Log("Scene index: " + sceneIndex);
         //get canvas bounds
@@ -82,7 +83,7 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < 4 * sceneIndex; i++)
         {
             Vector3 position = new Vector3();
-            switch (i)
+            switch (i % 4) // Use modulus operator to cycle through cases
             {
                 case 0:
                     position = new Vector3(min.x, Random.Range(min.y, max.y), 0);
