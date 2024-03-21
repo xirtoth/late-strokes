@@ -190,7 +190,7 @@ public class PlayerScript : MonoBehaviour
 
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
             var multiplier = 2 * sceneIndex * 0.6f;
-            Debug.Log("Enemy hit +" + col.gameObject.name + " at " + gameObject.tag);
+            Debug.Log("Enemy hit  +" + col.gameObject.name + " at " + gameObject.tag);
             //find all nearby object tagged as splash
             GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");
             Debug.Log("found splashes" + splashes.Length);
