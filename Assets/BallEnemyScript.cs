@@ -101,7 +101,7 @@ public class BallEnemyScript : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("taking damage");
+
         StartCoroutine(fadeOut());
     }
 

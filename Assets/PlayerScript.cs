@@ -82,7 +82,7 @@ public class PlayerScript : MonoBehaviour
         // shoot towards mouse position
         if (Input.GetMouseButton(0))
         {
-            Debug.Log(brush.name);
+
             if (Time.time < shootCooldown)
             {
                 return;
@@ -189,11 +189,11 @@ public class PlayerScript : MonoBehaviour
             }
 
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            var multiplier = 2 * sceneIndex * 0.6f;
-            Debug.Log("Enemy hit  +" + col.gameObject.name + " at " + gameObject.tag);
+            var multiplier = 2 * sceneIndex * 0.6f / 2; // Dividing by 2 to slow down the increase
+
             //find all nearby object tagged as splash
             GameObject[] splashes = GameObject.FindGameObjectsWithTag("Splash");
-            Debug.Log("found splashes" + splashes.Length);
+
             foreach (GameObject splash in splashes)
             {
                 //if its 1 unit near to player in circular radius then destroy it

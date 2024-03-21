@@ -25,6 +25,8 @@ public class BikeScript : MonoBehaviour
     public Texture2D speed80;
     public Texture2D roadBump;
 
+    public Texture2D roundAbout;
+
 
     // Start is called before the first frame update
     private void Start()
@@ -125,6 +127,31 @@ public class BikeScript : MonoBehaviour
 
             ShowRoadSign("Speed40");
         }
+        else if (other.gameObject.tag == "RoundAbout")
+        {
+
+            Debug.Log("RoundAbout");
+            var parent = other.transform.parent.gameObject;
+            if (parent.GetComponent<TrafficSignScript>() != null)
+            {
+                if (parent.GetComponent<TrafficSignScript>().hasEntered)
+                {
+                    return;
+                }
+            }
+            if (other.transform.parent != null)
+            {
+                //get parent of the object
+
+                //destroy parent
+                if (parent.GetComponent<TrafficSignScript>() != null)
+                    parent.GetComponent<TrafficSignScript>().ZoomEffect();
+            }
+            parent.GetComponent<TrafficSignScript>().hasEntered = true;
+            StartCoroutine("CameraTurn360");
+
+            ShowRoadSign("RoundAbout");
+        }
 
         else if (other.gameObject.tag == "Speed60")
         {
@@ -193,6 +220,26 @@ public class BikeScript : MonoBehaviour
         yield return new WaitForSeconds(2);
         gc.GetComponent<GameController>().Finish();
     }
+    private IEnumerator CameraTurn360()
+    {
+        Camera cam = Camera.main;
+        float duration = 8f; // Duration of the turn
+        float halfDuration = duration / 2f; // Halfway point
+        float startRotation = cam.transform.eulerAngles.z; // Starting rotation
+        float endRotation = startRotation + 360f; // Ending rotation
+
+        // Rotate to 360 degrees
+        for (float t = 0; t < halfDuration; t += Time.deltaTime)
+        {
+            float zRotation = Mathf.Lerp(startRotation, endRotation, t / halfDuration);
+            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, zRotation);
+            yield return null;
+        }
+
+        // Ensure the rotation is exactly 360 degrees
+        cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, endRotation);
+    }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == "Rainbow")
@@ -228,10 +275,13 @@ public class BikeScript : MonoBehaviour
             case "RoadBump":
                 roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(roadBump, new Rect(0, 0, roadBump.width, roadBump.height), new Vector2(0.5f, 0.5f), 100.0f);
                 break;
+            case "RoundAbout":
+                roadSign.GetComponent<SpriteRenderer>().sprite = Sprite.Create(roundAbout, new Rect(0, 0, roundAbout.width, roundAbout.height), new Vector2(0.5f, 0.5f), 100.0f);
+                break;
         }
         roadSign.transform.position = new Vector3(-2f, 0, 0);
         //roadSign.AddComponent<FadeInScript>();
-        roadSign.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.2f);
+        roadSign.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
         roadSign.GetComponent<SpriteRenderer>().sortingOrder = 1;
         roadSign.GetComponent<SpriteRenderer>().sortingLayerName = "Background";
         //scale it up

@@ -82,12 +82,12 @@ public class GameController : MonoBehaviour
             if (prosent > 90)
             {
 
-                Debug.Log("Spawning balls");
+
 
             }
             else
             {
-                Debug.Log(prosent);
+
             }
         }
 
@@ -122,7 +122,7 @@ public class GameController : MonoBehaviour
 
 
         resultBuffer.GetData(resultData);
-        Debug.Log("White pixel percentage: " + (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100 + "%");
+
         prosent = (resultData[0] / (float)(screenshot.width * screenshot.height)) * 100;
         GetComponent<UIcontroller>().precentangeText.text = prosent.ToString() + "%";
 
@@ -153,10 +153,10 @@ public class GameController : MonoBehaviour
             }
         }
 
-        Debug.Log("Screenshot has " + whitePixels + " white pixels, which is " + (whitePixels / (float)(pixels.Length)) * 100 + "% of the total pixels");
+
         prosent = (whitePixels / (float)(pixels.Length)) * 100;
         yield return new WaitForSecondsRealtime(1);
-        Debug.Log("Time taken to calculate white pixels: " + (Time.realtimeSinceStartup - starTime) + " seconds");
+
         doneCalculating = true;
     }
     private IEnumerator DisplayScreenshots()
@@ -279,7 +279,7 @@ public class GameController : MonoBehaviour
 
         Vector3 randomPosition = new Vector3(UnityEngine.Random.Range(min.x, max.x), UnityEngine.Random.Range(min.y, max.y), 0);
         Instantiate(powerUps[UnityEngine.Random.Range(0, powerUps.Count)], randomPosition, Quaternion.identity);
-        Debug.Log("instantiated at location " + randomPosition.ToString());
+
     }
 
     public void AddScreenshot(Texture2D tex)
@@ -292,7 +292,7 @@ public class GameController : MonoBehaviour
         cam.transform.position = finishSquare.transform.position;
         cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -10);
         Time.timeScale = 0;
-        Debug.Log("gc finish");
+
         StartCoroutine(DisplayScreenshots());
     }
 }

@@ -52,7 +52,7 @@ public class EnemyScript : MonoBehaviour
         transform.localScale = new Vector3(randomScale, randomScale, 1);
         // get scene index
         int sceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-        moveSpeed = Random.Range(1f, 2f * sceneIndex);
+        moveSpeed = Random.Range(1f, 2f * sceneIndex / 2);
         initialPosition = transform.position;
 
     }
@@ -94,7 +94,10 @@ public class EnemyScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         //wave enemy left and right rotation using isn
-        transform.rotation *= Quaternion.Euler(0, 0, Mathf.Sin(Time.time * frequency) * amplitude);
+        transform.rotation *= Quaternion.Euler(0, 0, Mathf.Sin(Time.time * frequency * 10) * amplitude * 5);
+
+
+
     }
 
 
@@ -171,7 +174,7 @@ public class EnemyScript : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("taking damage");
+
         StartCoroutine(fadeOut());
     }
 }
