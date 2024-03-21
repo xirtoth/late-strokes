@@ -15,6 +15,7 @@ public class MenuController : MonoBehaviour
     {
         //set lvl to 1 in playerprefs
         PlayerPrefs.SetInt("Level", 1);
+        Time.timeScale = 1;
     }
 
     public void StartGame()

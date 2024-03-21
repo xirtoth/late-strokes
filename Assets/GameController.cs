@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 
 
@@ -39,6 +40,8 @@ public class GameController : MonoBehaviour
 
     public TextMeshProUGUI levelText;
 
+    public GameObject MenuPanel;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -48,6 +51,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
 
+        // MenuPanel = GameObject.Find("MenuPanel");
         Bounds bounds = canvas.GetComponent<Renderer>().bounds;
 
         Vector3 min = bounds.min;
@@ -79,7 +83,9 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            MenuPanel.SetActive(true);
+            Debug.Log("Menu panel active");
+            Time.timeScale = 0;
         }
         if (Time.time > timeToCalculatePixels)
         {
@@ -101,6 +107,18 @@ public class GameController : MonoBehaviour
 
 
     }
+
+    public void ResumeGame()
+    {
+        MenuPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void QuitToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     private void StartCountingWhitePixels(Texture2D screenshot)
     {
 

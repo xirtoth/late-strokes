@@ -17,6 +17,7 @@ TagManager:
   - Splash
   - Weapon
   - RoundAbout
+  - MenuPanel
   layers:
   - Default
   - TransparentFX
